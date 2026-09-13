@@ -1,0 +1,8 @@
+# buf.gen.yaml
+version: v2
+inputs:
+  - directory: lib/mtaapi/proto
+plugins:
+  - local: protoc-gen-es
+    out: lib/mtaapi/gen
+    opt: target=ts

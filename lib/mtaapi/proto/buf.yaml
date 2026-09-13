@@ -1,0 +1,7 @@
+# buf.yaml
+version: v2
+modules:
+  - path: realtime-gtfs
+    name: buf.build/mtapi/realtime-gtfs
+  - path: nyct
+    name: buf.build/mtapi/nyct
