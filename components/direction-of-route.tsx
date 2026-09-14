@@ -7,6 +7,8 @@ import {
   CardTitle,
 } from "./ui/card"
 import _, { now } from "lodash"
+import { ArrowCircleDownIcon, ArrowCircleUpIcon } from "@phosphor-icons/react"
+import { NyctTripDescriptor_Direction } from "@/lib/mtaapi/gen/nyct_pb"
 
 interface IProps {
   tripHeadsign: string
@@ -24,14 +26,31 @@ export function DirectionOfRoute({ tripHeadsign, stopTimeUpdates }: IProps) {
       rtf.format(Math.round(Number(u.arrival.time) / 60 - now), "minutes")
     )
     .value()
-
+  const direction = getDirectionParts(_.first(stopTimeUpdates)?.direction!)
   return (
     <Card>
       <CardHeader>
         <CardTitle>Headed to {tripHeadsign}</CardTitle>
-        <CardDescription>Direction</CardDescription>
+        <CardDescription className="flex flex-row items-center gap-1 align-middle">
+          {direction.icon}
+          {direction.text}
+        </CardDescription>
       </CardHeader>
       <CardContent>Arriving {closestUpdates.join(", ")}</CardContent>
     </Card>
   )
+}
+
+function getDirectionParts(direction: NyctTripDescriptor_Direction) {
+  if (direction === 1) {
+    return {
+      icon: <ArrowCircleUpIcon />,
+      text: "Northbound",
+    }
+  } else {
+    return {
+      icon: <ArrowCircleDownIcon />,
+      text: "Southbound",
+    }
+  }
 }
