@@ -7439,4 +7439,4 @@ export const STOPS = [
     stopName: "St George",
     parentStation: "S31"
 }
-] as const;
+];

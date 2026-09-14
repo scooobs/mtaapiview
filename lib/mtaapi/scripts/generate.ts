@@ -26,7 +26,7 @@ ${stops
 }`
   )
   .join(",\n")}
-] as const;`
+];`
 
   invariant(
     _.uniqBy(stops, (s) => s.stopId).length === stops.length,

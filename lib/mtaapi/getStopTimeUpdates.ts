@@ -2,6 +2,7 @@ import _ from "lodash"
 import type { NYCTFeedMessage } from "./parseFeedMessage"
 import { getServiceId } from "./getServiceId"
 import { getTrip } from "./resources/trips"
+import { getStopName } from "./resources/stops"
 
 export function getStopTimeUpdates(feedMessage: NYCTFeedMessage) {
   return _.chain(feedMessage.entity)
@@ -27,6 +28,7 @@ export function getStopTimeUpdates(feedMessage: NYCTFeedMessage) {
 
       return tripUpdate.stopTimeUpdate.map((stu) => {
         const { arrival, departure, stopId, stopSequence } = stu
+        const stopName = getStopName(stopId)
         if (arrival == null || departure == null) {
           // no arrival or departure estimates
           return
@@ -37,6 +39,7 @@ export function getStopTimeUpdates(feedMessage: NYCTFeedMessage) {
           arrival,
           departure,
           stopId,
+          stopName,
           direction,
           routeId,
           tripHeadsign,
@@ -46,3 +49,5 @@ export function getStopTimeUpdates(feedMessage: NYCTFeedMessage) {
     .compact()
     .value()
 }
+
+export type StopTimeUpdate = ReturnType<typeof getStopTimeUpdates>[number]
