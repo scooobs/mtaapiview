@@ -23,8 +23,7 @@ export function getStopTimeUpdates(feedMessage: NYCTFeedMessage) {
         startDate,
       } = trip
 
-      const serviceId = getServiceId(startDate)
-      const { tripHeadsign } = getTrip(tripId, serviceId)
+      const { tripHeadsign } = getTrip(tripId)
 
       return tripUpdate.stopTimeUpdate.map((stu) => {
         const { arrival, departure, stopId, stopSequence } = stu

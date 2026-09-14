@@ -4,19 +4,20 @@ import { invariant } from "@/lib/invariant"
 
 const tripsByQueryId = _.groupBy(TRIPS, (t) => t.queryableTripId)
 
-export function getTrip(query: string, serviceId?: string) {
+const FALLBACK_REGEX = /\d\d\d\d\d\d_([\w|\.]+)/
+
+export function getTrip(query: string) {
   const maybeTrips = tripsByQueryId[query]
-  invariant(maybeTrips, `Could not find trip via query ${query}`)
-  if (serviceId) {
-    const withMatchingService = maybeTrips.filter((mt) =>
-      mt.serviceId.includes(serviceId)
-    )
-    const matched = _.first(withMatchingService)
-    if (matched != null) {
-      return matched
-    }
+  if (maybeTrips != null) {
+    const matched = _.first(maybeTrips)
+    invariant(matched, "One must be matched at this point")
+    return matched
   }
-  const matched = _.first(maybeTrips)
-  invariant(matched, "One must be matched at this point")
-  return matched
+  const match = query.match(FALLBACK_REGEX)
+  invariant(match, "Couldn't get the backup query extracted")
+  const backupQuery = match[1]
+  const backupTrip = _.find(TRIPS, (t) => t.tripId.includes(backupQuery))
+
+  invariant(backupTrip, `Could not find trip via backup query ${backupQuery}`)
+  return backupTrip
 }

@@ -9,7 +9,7 @@ async function useSubwayDataQuery() {
   const buffer = new Uint8Array(await res.arrayBuffer())
   const decoded = fromBinary(FeedMessageSchema, buffer)
   const parsed = parseFeedMessage(decoded)
-  return getStopTimeUpdates(parsed).filter((stu) => (stu.routeId = "L"))
+  return getStopTimeUpdates(parsed)
 }
 
 export default useSubwayDataQuery
